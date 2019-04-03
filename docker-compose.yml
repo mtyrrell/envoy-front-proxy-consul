@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  consul:
+    image: "consul"
+    ports:
+      - 8500:8500
+      - 8502:8502
+
+  consul-registrator:
+    image: gliderlabs/registrator:v7
+    command: ['consul://consul:8500']
+    links:
+      - consul
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    depends_on:
+      - consul
+
+  envoy:
+    image: "turbinelabs/envoy-simple"
+    ports:
+      - 80:80
+      - 9999:9999
+    environment:  
+      - ENVOY_XDS_HOST=rotor
+      - ENVOY_XDS_PORT=50000
+      - PORT=9999:9999
+      - PORT=80:80
+
+  rotor:
+    image: turbinelabs/rotor
+    ports:
+      - 50000:50000
+    environment:
+      - ROTOR_CMD=consul
+      - ROTOR_CONSUL_DC=dc1
+      - ROTOR_CONSUL_HOSTPORT=consul:8500
+
+  echo:
+    build: ./echo
+    ports:
+     - "9090:9090"
+    environment:
+     - PORT=9090
+     - SERVICE_NAME=echo
+     - SERVICE_9001_NAME=echo
+     - SERVICE_TAGS=tbn-cluster     
+     - REGION=private

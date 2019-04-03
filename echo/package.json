@@ -1,0 +1,16 @@
+{
+  "name": "echo",
+  "version": "0.1.0",
+  "description": "echo microservice for demos",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "microservice",
+    "echo",
+    "hello",
+    "world"
+  ],
+  "license": "Apache-2.0"
+}
