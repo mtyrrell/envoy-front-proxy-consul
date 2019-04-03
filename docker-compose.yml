@@ -39,11 +39,9 @@ services:
 
   echo:
     build: ./echo
-    ports:
-     - "9090:9090"
     environment:
      - PORT=9090
      - SERVICE_NAME=echo
-     - SERVICE_9001_NAME=echo
+     - SERVICE_9090_NAME=echo
      - SERVICE_TAGS=tbn-cluster     
      - REGION=private
